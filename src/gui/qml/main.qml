@@ -1,5 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 import QtQuick.Window 2.3
 
 ApplicationWindow {
@@ -16,7 +17,7 @@ ApplicationWindow {
 
         onStateChanged: {
             if (state === 0)
-                message.text = "Mis-click detected, restarting..."
+                message.text = qsTr("Mis-click detected, restarting...")
             else
                 message.text = message.defaultText
 
@@ -33,7 +34,7 @@ ApplicationWindow {
             }
         }
 
-        onSetDisplaySize: {
+        onInitialized: {
             displayWidth = newWidth > 0 ? newWidth : Screen.desktopAvailableWidth;
             displayHeight = newHeight > 0 ? newHeight : Screen.desktopAvailableHeight;
 
@@ -71,13 +72,55 @@ ApplicationWindow {
         Text {
             id: message
 
-            readonly property string defaultText: "Press the point, use a stylus to increase precision.\n(To abort, press any key)"
+            readonly property string defaultText: qsTr("Press the point, use a stylus to increase precision.")
 
             color: "white"
             font.pointSize: 16
             horizontalAlignment: Qt.AlignHCenter
             text: defaultText
             anchors.centerIn: parent
+        }
+
+        Button {
+            id: abortButton
+
+            z: 10
+            anchors {
+                top: message.bottom
+                topMargin: 10
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            width: 200
+            height: 50
+
+            style: ButtonStyle {
+                id: proofButtonStyle
+
+                background: Rectangle {
+                    id: backgroundRectangle
+
+                    radius: 5
+                    border.width: control.pressed ? 0 : 1
+                    border.color: "white"
+                    color: "#1262AD"
+                }
+
+                label: Text {
+                    id: label
+
+                    height: control.height
+
+                    horizontalAlignment: Qt.AlignHCenter
+                    verticalAlignment: Qt.AlignVCenter
+                    color: "white"
+                    text: control.text
+                    font.pixelSize: 18
+                }
+            }
+
+            text: qsTr("Abort calibration")
+            onClicked: Qt.quit()
         }
 
         Repeater {
@@ -94,8 +137,6 @@ ApplicationWindow {
             anchors.fill: parent
             onClicked: worker.onClicked(mouseX, mouseY, displayWidth, displayHeight)
         }
-
-        Keys.onPressed: Qt.quit()
     }
 
     Component.onCompleted: showFullScreen()

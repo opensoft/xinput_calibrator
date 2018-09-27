@@ -18,7 +18,7 @@ public:
 
 signals:
     void stateChanged(int state);
-    void setDisplaySize(int newWidth, int newHeight, int numBlocks);
+    void initialized(int newWidth, int newHeight, int numBlocks);
 
 private:
     QScopedPointer<Calibrator> m_calibrator;

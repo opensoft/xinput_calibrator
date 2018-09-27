@@ -27,19 +27,19 @@ void CalibratorWorker::init()
             fprintf(stderr, "Warning: error parsing geometry string - using defaults.\n");
             geo = nullptr;
         } else {
-            setDisplaySize(width, height, num_blocks);
+            emit initialized(width, height, num_blocks);
             m_calibrator->reset();
         }
     }
     if (geo == nullptr) {
-        setDisplaySize(0, 0, num_blocks);
+        emit initialized(0, 0, num_blocks);
         m_calibrator->reset();
     }
 }
 
 void CalibratorWorker::onClicked(int x, int y, int displayWidth, int displayHeight)
 {
-    if (!m_calibrator->add_click(x, y) && m_calibrator->get_numclicks() == 0) {
+    if (!m_calibrator->add_click(x, y) && m_calibrator->get_numclicks() <= 0) {
         emit stateChanged(0);
         return;
     }
