@@ -13,6 +13,7 @@ public:
     ~CalibratorWorker();
 
     Q_INVOKABLE void init();
+    Q_INVOKABLE void abort();
 
     Q_INVOKABLE void onClicked(int x, int y, int displayWidth, int displayHeight);
 

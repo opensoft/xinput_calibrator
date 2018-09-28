@@ -37,6 +37,11 @@ void CalibratorWorker::init()
     }
 }
 
+void CalibratorWorker::abort()
+{
+    qApp->exit(1);
+}
+
 void CalibratorWorker::onClicked(int x, int y, int displayWidth, int displayHeight)
 {
     if (!m_calibrator->add_click(x, y) && m_calibrator->get_numclicks() <= 0) {
@@ -45,8 +50,10 @@ void CalibratorWorker::onClicked(int x, int y, int displayWidth, int displayHeig
     }
 
     if (m_calibrator->get_numclicks() >= 4) {
-        if (!m_calibrator->finish(displayWidth, displayHeight))
+        if (!m_calibrator->finish(displayWidth, displayHeight)) {
             fprintf(stderr, "Error: unable to apply or save configuration values");
+            qApp->exit(2);
+        }
 
         qApp->quit();
         return;

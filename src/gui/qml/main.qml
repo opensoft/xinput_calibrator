@@ -120,7 +120,7 @@ ApplicationWindow {
             }
 
             text: qsTr("Abort calibration")
-            onClicked: Qt.quit()
+            onClicked: worker.abort()
         }
 
         Repeater {
