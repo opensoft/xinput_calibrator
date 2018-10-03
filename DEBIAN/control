@@ -1,0 +1,9 @@
+Package: xinput_calibrator
+Version: 0.18.10.3
+Section: misc
+Depends: qt5-opensoft
+Suggests: 
+Recommends: 
+Architecture: amd64
+Maintainer: Vasiliy Sorokin <vasiliy.sorokin@opensoftdev.ru>
+Description: xinput_calibrator version with Qt frontend 

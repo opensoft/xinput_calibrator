@@ -1,0 +1,36 @@
+sudo: required
+dist: trusty
+language: cpp
+services:
+  - docker
+
+env:
+  global:
+    - secure: "ahffr1Ws5mxz/f6TEASkVDhNBMNw0j72ONb3Oe1zfG1z6SsDuqpZPMvqHsmgtJG3nil58H3RtzmbpMw/OXL9pAWwD9CN98VbFDlY8P3HygLVDSnfB1jeffNl3MOOaIqmF0QWWXa9pRobMaW5Z1KEpGN8rOSL1Fwct5XwY//I7A7Rjr6ExrYwDMBPOo4VBSmZpqOkiWnPj7yVVLFU2BJyrC5kVfrxW9pLQhMsgeTFk+mSKkGKYMSgrDQysUkH0Ber61tt+kUgymlCMUtn4zaKXc8lpv07gAeOzryD287hQ/lly8WGj+FhTaJw/+BsAbvQcI4NtS5qfAjR3oazCQSCHOlRlfNqNNCO0tpthtEwKWZFqOZlqc7T1U8+T5jkNuF6+UeiC5Kd665TO0M2nDbt1ANw6i8R7cuSuZ346LgkIGJhaRc+2VT6P4JZyXw1R5PORAgefNoENfas+UvclRjuMzLTkbdB9HeFINuw1te0EDtoijF6XdBXaQE77LS+vUeBTBrzlm8XzM5APzatoTNeiNGRwxopu4zkBuF8wIjk40KI6Tr2RLzmtGk92y+V6Quwy0/Pb1k3sJUOhIQLUFRUiHm7Gg/SdFHXoumeql+J8jznvpufhsEI1Y/fPtjCFlLqPBvre7FdToypduyw+fmuUU06JfoA9w3aGgXxMUHGd58="
+    - secure: "jXb8Jzazlu0YoIFAksQqDhHMgwQQ7FmZy0hJeOmEqLMvJPtM19fRkNDERMWE5XZ87W7bay0EPsR3YiYTxskoOdvw06v3aIRoANfmyS31FNPZtLimb7oc/pFHewj/j84BY3UF9qfrvMcENRFN/FP/LqpzluUsvnTjggFigtdpePhN0M1kPAk9DvsoYUn3ptsRZsbZtR6L/4xooGqV46YbkjdiWDXR8M7ibMxCWwCmPakvknsHKF36hPZYavdIjfWV25aOhp8cklS2GSFRY7U3/KgqrjS+tzszoLXLx6P4wXGt/+HpfhY6y7FgPObcfn9Xg1ujuO2g4n3B02zz3PULQpI0RFFdR9gVHOa9W1ZDAYER/xKKLSb7fLVHpOui0+F1JI5y/EfsGLC+eM4bIsnTdbpjmBjsFDzPKnOvwtgI7cIQrK+5imAJfzcteOcKF4QNsKQAUL0X3mjZ8ROl1mNGABFhFcCwdDzDhXv+rxNT2GDr6KLxB9dmwh9GHwyjhrbVwvG7YYAqfVrDlr2HCVeUXKhOTMjNXyexQ0IAb+NJG9IDMeloDg/PSxaeB4QXvQ6lL83KZKL0X7NMaILf3h4ZzcbnVGNiZuzqZpzcibHjzBKiDOy9zgGnv9PL3f2OgSMYIZSAt7DANufcpVTbfO5nEmsyv4Fy83pCYo++5laxrYg="
+
+cache:
+  directories:
+    - $HOME/builder_ccache 
+    - $HOME/full_build
+    - $HOME/proof-bin
+
+before_install: export -f travis_fold && export -f travis_time_start && export -f travis_time_finish && export -f travis_nanoseconds
+
+jobs:
+  include:
+    - &compile
+      stage: compilation
+      name: Compilation (Debian9/clang/ccache)
+      script: `pwd`/scripts/linux_compile.sh
+    - &post-compile
+      stage: Post compilation
+      name: Debian package upload to S3
+      if: type != pull_request AND branch != master
+      before_script: pip install awscli
+      script:
+        - export PROJECT_ROOT=`pwd`
+        - export PACKAGE_NAME=`basename "$PROJECT_ROOT"`
+        - rm -rf README.md .travis.yml .git*
+        - fakeroot dpkg-deb --build "$PROJECT_ROOT"
+        - aws s3 cp "../$PACKAGE_NAME.deb" s3://proof.travis.builds/__dependencies/proof-restarter.deb

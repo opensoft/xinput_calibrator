@@ -1,8 +1,9 @@
 TEMPLATE = app
 TARGET = xinput_calibrator
 INCLUDEPATH += . src
-DEFINES += VERSION='\\"0.0.1\\"'
+DEFINES += VERSION='\\"0.18.10.3\\"'
 QT += qml
+
 CONFIG += c++14
 LIBS += -lX11 -lXi
 QMAKE_CXXFLAGS_WARN_ON += -Wno-ignored-qualifiers -Wno-unused-parameter
