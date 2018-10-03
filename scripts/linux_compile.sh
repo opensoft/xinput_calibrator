@@ -28,7 +28,7 @@
 set -e
 
 DOCKER_IMAGE=opensoftdev/proof-builder-ccache;
-
+TARGET_NAME=xinput_calibrator
 mkdir $HOME/builder_logs;
 
 travis_fold start "prepare.docker" && travis_time_start;
