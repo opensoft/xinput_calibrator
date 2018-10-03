@@ -24,7 +24,7 @@ jobs:
       name: Compilation (Debian9/clang/ccache)
       script: 
         - export PROJECT_ROOT=`pwd` 
-        - "$PROJECT_ROOT"/scripts/linux_compile.sh
+        - $PROJECT_ROOT/scripts/linux_compile.sh
     - &post-compile
       stage: Post compilation
       name: Debian package upload to S3
