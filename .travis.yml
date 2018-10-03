@@ -29,7 +29,7 @@ jobs:
       stage: Post compilation
       name: Debian package upload to S3
       if: type != pull_request AND branch != master
-      before_script: pip install awscli
+      before_script: pip install --user awscli
       script:
         - export PROJECT_ROOT=`pwd`
         - export PACKAGE_NAME=`basename "$PROJECT_ROOT"`
