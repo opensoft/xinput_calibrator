@@ -40,7 +40,4 @@ jobs:
       before_script: pip install --user awscli
       script:
         - export PROJECT_ROOT=`pwd`
-        - export PACKAGE_NAME=`basename "$PROJECT_ROOT"`
-        - rm -rf README.md .travis.yml .git*
-        - fakeroot dpkg-deb --build "$PROJECT_ROOT"
-        - aws s3 cp "../$PACKAGE_NAME.deb" s3://proof.travis.builds/__dependencies/xinput_calibrator.deb
+        - $PROJECT_ROOT/scripts/build_and_upload_deb.sh

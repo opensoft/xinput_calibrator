@@ -24,6 +24,7 @@
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 # Author: denis.kormalev@opensoftdev.com (Denis Kormalev)
+# Author: vasiliy.sorokin@opensoftdev.ru (Vasiliy Sorokin)
 
 set -e
 
