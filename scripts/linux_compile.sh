@@ -45,7 +45,7 @@ echo " ";
 travis_fold start "prepare.extra_deps" && travis_time_start;
 echo -e "\033[1;33mInstalling extra dependencies...\033[0m";
 docker exec -t builder bash -c "apt-get -qq update";
-docker exec -t builder bash -c "apt-get -qq install x11proto-input-dev -y --no-install-recommends";
+docker exec -t builder bash -c "apt-get -qq install libxi-dev -y --no-install-recommends";
 travis_time_finish && travis_fold end "prepare.extra_deps";
 echo " ";
 
@@ -55,14 +55,14 @@ echo "$ qmake -r 'QMAKE_CXXFLAGS += -ferror-limit=0 -fcolor-diagnostics' PREFIX=
 docker exec -t builder bash -c "exec 3>&1; set -o pipefail; rm -rf /sandbox/logs/*; cd build; \
     qmake -r 'QMAKE_CXXFLAGS += -ferror-limit=0 -fcolor-diagnostics' PREFIX='/sandbox/package-$TARGET_NAME' \
     ../target_src/$TARGET_NAME.pro 2>&1 1>&3 | (tee /sandbox/logs/errors.log 1>&2)";
-travis_time_finish && travis_fold end "build.qmake" && $HOME/proof-bin/dev-tools/travis/check_for_errorslog.sh qmake || true;
+travis_time_finish && travis_fold end "build.qmake";
 echo " ";
 
 travis_fold start "build.compile" && travis_time_start;
 echo -e "\033[1;33mCompiling...\033[0m";
 echo "$ make -j4";
 docker exec -t builder bash -c "exec 3>&1; set -o pipefail; rm -rf /sandbox/logs/*; cd build; make -j4 2>&1 1>&3 | (tee /sandbox/logs/errors.log 1>&2)";
-travis_time_finish && travis_fold end "build.compile" && $HOME/proof-bin/dev-tools/travis/check_for_errorslog.sh compilation || true;
+travis_time_finish && travis_fold end "build.compile";
 echo " ";
 
 travis_fold start "build.install" && travis_time_start;
@@ -71,6 +71,6 @@ echo "$ mkdir -p /sandbox/package-$TARGET_NAME/opt/Opensoft/$TARGET_NAME/bin && 
 docker exec -t builder bash -c "mkdir -p /sandbox/package-$TARGET_NAME/opt/Opensoft/$TARGET_NAME/bin && cd /sandbox/build && make install";
 echo "$ tar -czf package-$TARGET_NAME.tar.gz package-$TARGET_NAME && mv /sandbox/package-$TARGET_NAME.tar.gz /sandbox/build/package-$TARGET_NAME.tar.gz";
 docker exec -t builder bash -c "tar -czf package-$TARGET_NAME.tar.gz package-$TARGET_NAME && mv /sandbox/package-$TARGET_NAME.tar.gz /sandbox/build/package-$TARGET_NAME.tar.gz";
-travis_time_finish && travis_fold end "build.install" && $HOME/proof-bin/dev-tools/travis/check_for_errorslog.sh "make install" || true;
+travis_time_finish && travis_fold end "build.install";
 echo " ";
 
