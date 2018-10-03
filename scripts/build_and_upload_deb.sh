@@ -28,7 +28,7 @@
 
 set -e
 
-TARGET_NAME = xinput_calibrator
+TARGET_NAME=xinput_calibrator
 APP_VERSION="$(grep -e 'VERSION\ =' $TARGET_NAME.pro | sed 's/^VERSION\ =\ \(.*\)/\1/')";
 
 echo -e "\033[1;32mApp version: $APP_VERSION\033[0m";
