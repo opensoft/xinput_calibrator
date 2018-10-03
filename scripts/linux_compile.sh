@@ -31,6 +31,14 @@ DOCKER_IMAGE=opensoftdev/proof-builder-ccache;
 TARGET_NAME=xinput_calibrator
 mkdir $HOME/builder_logs;
 
+travis_fold start "prepare.extra_deps" && travis_time_start;
+echo -e "\033[1;33mInstalling extra dependencies...\033[0m";
+docker exec -t builder bash -c "apt-get -qq update";
+docker exec -t builder bash -c "apt-get -qq install x11proto-input-dev -y --no-install-recommends";
+travis_time_finish && travis_fold end "prepare.extra_deps";
+echo " ";
+
+
 travis_fold start "prepare.docker" && travis_time_start;
 echo -e "\033[1;33mDownloading and starting Docker container...\033[0m";
 sudo rm -rf $HOME/full_build && mkdir $HOME/full_build;
