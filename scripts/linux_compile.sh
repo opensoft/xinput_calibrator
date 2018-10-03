@@ -27,12 +27,7 @@
 
 set -e
 
-source $HOME/proof-bin/dev-tools/travis/detect_build_type.sh;
-if [ -n "$RELEASE_BUILD" ]; then
-    DOCKER_IMAGE=opensoftdev/proof-builder-base;
-else
-    DOCKER_IMAGE=opensoftdev/proof-builder-ccache;
-fi
+DOCKER_IMAGE=opensoftdev/proof-builder-ccache;
 
 mkdir $HOME/builder_logs;
 
