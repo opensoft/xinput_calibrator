@@ -56,12 +56,6 @@ docker exec -t builder apt-get update;
 travis_time_finish && travis_fold end "prepare.apt_cache";
 echo " ";
 
-travis_fold start "prepare.extra_deps" && travis_time_start;
-echo -e "\033[1;33mInstalling extra dependencies...\033[0m";
-docker exec -t builder bash -c "apt-get -qq install libxi -y --no-install-recommends";
-travis_time_finish && travis_fold end "prepare.extra_deps";
-echo " ";
-
 travis_fold start "prepare.dirs" && travis_time_start;
 echo -e "\033[1;33mPreparing dirs structure...\033[0m";
 echo "$ cp build/package-$TARGET_NAME.tar.gz ./ && tar -xzf package-$TARGET_NAME.tar.gz";
