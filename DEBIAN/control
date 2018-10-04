@@ -1,4 +1,4 @@
-Package: xinput_calibrator
+Package: xinput-calibrator
 Version: 0.18.10.3
 Section: misc
 Depends: qt5-opensoft
