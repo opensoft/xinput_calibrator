@@ -34,12 +34,6 @@ APP_VERSION="$(grep -e 'VERSION\ =' $TARGET_NAME.pro | sed 's/^VERSION\ =\ \(.*\
 echo -e "\033[1;32mApp version: $APP_VERSION\033[0m";
 echo " ";
 
-travis_fold start "prepare.awscli" && travis_time_start;
-echo -e "\033[1;33mInstalling awscli...\033[0m";
-pip install --user awscli;
-travis_time_finish && travis_fold end "prepare.awscli";
-echo " ";
-
 travis_fold start "prepare.docker" && travis_time_start;
 echo -e "\033[1;33mDownloading and starting Docker container...\033[0m";
 docker pull opensoftdev/proof-builder-base:latest;
@@ -48,6 +42,12 @@ docker run -id --name builder -w="/sandbox" -v $(pwd):/sandbox/target_src -v $HO
     opensoftdev/proof-builder-base tail -f /dev/null;
 docker ps;
 travis_time_finish && travis_fold end "prepare.docker";
+echo " ";
+
+travis_fold start "prepare.awscli" && travis_time_start;
+echo -e "\033[1;33mInstalling awscli...\033[0m";
+docker exec -t builder bash -c "pip install --user awscli"
+travis_time_finish && travis_fold end "prepare.awscli";
 echo " ";
 
 travis_fold start "prepare.apt_cache" && travis_time_start;
