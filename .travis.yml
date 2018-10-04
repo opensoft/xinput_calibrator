@@ -32,7 +32,7 @@ jobs:
       name: Compilation (Debian9/clang/ccache)
       script: 
         - export PROJECT_ROOT=`pwd` 
-        - $PROJECT_ROOT/scripts/linux_compile.sh
+        - $PROJECT_ROOT/travis/linux_compile.sh
     - &post-compile
       stage: Post compilation
       name: Debian package upload to S3
@@ -40,4 +40,4 @@ jobs:
       before_script: pip install --user awscli
       script:
         - export PROJECT_ROOT=`pwd`
-        - $PROJECT_ROOT/scripts/build_and_upload_deb.sh
+        - $PROJECT_ROOT/travis/build_and_upload_deb.sh
