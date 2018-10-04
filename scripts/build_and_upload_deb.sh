@@ -70,14 +70,10 @@ docker exec -t builder bash -c "fakeroot dpkg-deb --build package-$TARGET_NAME";
 travis_time_finish && travis_fold end "pack.deb";
 echo " ";
 
-DEB_FILENAME=`find -maxdepth 1 -name "*.deb" -exec basename "{}" \; -quit`
-if [ -z  "$DEB_FILENAME" ]; then
-    echo -e "\033[1;31mCan't find created deb package, halting\033[0m";
-    exit 1
-fi
+docker exec -t builder bash -c "export DEB_FILENAME=`find -maxdepth 1 -name \"*.deb\" -exec basename \"{}\" \; -quit`;"
 
 travis_time_start;
 echo -e "\033[1;33mUploading to AWS S3...\033[0m";
-aws s3 cp "../$DEB_FILENAME" s3://proof.travis.builds/__dependencies/$DEB_FILENAME
-fi
+docker exec -t builder bash -c "aws s3 cp \"$DEB_FILENAME\" s3://proof.travis.builds/__dependencies/$DEB_FILENAME"
+
 travis_time_finish
