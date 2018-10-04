@@ -1,8 +1,9 @@
 TEMPLATE = app
 TARGET = xinput_calibrator
 INCLUDEPATH += . src
-DEFINES += VERSION='\\"0.0.1\\"'
+DEFINES += VERSION='\\"0.7.5-85\\"'
 QT += qml
+
 CONFIG += c++14
 LIBS += -lX11 -lXi
 QMAKE_CXXFLAGS_WARN_ON += -Wno-ignored-qualifiers -Wno-unused-parameter
@@ -26,3 +27,6 @@ SOURCES += src/calibrator.cpp \
 RESOURCES += \
     src/gui/qml/xinput_qml.qrc \
     src/gui/images/xinput_images.qrc
+
+target.path = $$PREFIX/opt/Opensoft/$$TARGET
+INSTALLS += target

@@ -11,6 +11,8 @@ ApplicationWindow {
     property int displayWidth: width
     property int displayHeight: height
 
+    flags: Qt.WindowStaysOnTopHint
+
     onVisibleChanged: worker.init()
     Connections {
         target: worker
