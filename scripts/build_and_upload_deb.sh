@@ -70,7 +70,7 @@ docker exec -t builder bash -c "fakeroot dpkg-deb --build package-$TARGET_NAME";
 travis_time_finish && travis_fold end "pack.deb";
 echo " ";
 
-ls .
+ls ..
 DEB_FILENAME=`find -maxdepth 1 -name "*.deb" -exec basename "{}" \; -quit`
 if [ -z  "$DEB_FILENAME" ]; then
     echo -e "\033[1;31mCan't find created deb package, halting\033[0m";
