@@ -66,7 +66,7 @@ echo " ";
 travis_fold start "pack.deb" && travis_time_start;
 echo -e "\033[1;33mCreating deb package...\033[0m";
 echo "$ fakeroot dpkg-deb --build package-$TARGET_NAME";
-docker exec -t builder bash -c "fakeroot dpkg-deb --build package-$TARGET_NAME";
+docker exec -t builder bash -c "fakeroot dpkg-deb --build package-$TARGET_NAME xinput-calibrator.deb";
 travis_time_finish && travis_fold end "pack.deb";
 echo " ";
 
