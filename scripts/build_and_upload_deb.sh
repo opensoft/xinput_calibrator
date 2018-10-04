@@ -79,6 +79,6 @@ fi
 
 travis_time_start;
 echo -e "\033[1;33mUploading to AWS S3...\033[0m";
-aws s3 cp \"$DEB_FILENAME\" s3://proof.travis.builds/__dependencies/$DEB_FILENAME"
+aws s3 cp \"$DEB_FILENAME\" s3://proof.travis.builds/__dependencies/$DEB_FILENAME
 
 travis_time_finish
