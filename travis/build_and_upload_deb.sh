@@ -29,10 +29,6 @@
 set -e
 
 TARGET_NAME=xinput_calibrator
-APP_VERSION="$(grep -e 'VERSION\ =' $TARGET_NAME.pro | sed 's/^VERSION\ =\ \(.*\)/\1/')";
-
-echo -e "\033[1;32mApp version: $APP_VERSION\033[0m";
-echo " ";
 
 travis_fold start "prepare.awscli" && travis_time_start;
 echo -e "\033[1;33mInstalling awscli...\033[0m";
@@ -66,7 +62,7 @@ echo " ";
 travis_fold start "pack.deb" && travis_time_start;
 echo -e "\033[1;33mCreating deb package...\033[0m";
 echo "$ fakeroot dpkg-deb --build package-$TARGET_NAME";
-docker exec -t builder bash -c "fakeroot dpkg-deb --build package-$TARGET_NAME /sandbox/target_src/$TARGET_NAME.deb";
+docker exec -t builder bash -c "fakeroot dpkg-deb --build package-$TARGET_NAME /sandbox/target_src/xinput-calibrator.deb";
 travis_time_finish && travis_fold end "pack.deb";
 echo " ";
 
@@ -78,6 +74,6 @@ fi
 
 travis_time_start;
 echo -e "\033[1;33mUploading to AWS S3...\033[0m";
-aws s3 cp \"$DEB_FILENAME\" s3://proof.travis.builds/__dependencies/$DEB_FILENAME
+aws s3 cp "$DEB_FILENAME" "s3://proof.travis.builds/__dependencies/$DEB_FILENAME"
 
 travis_time_finish

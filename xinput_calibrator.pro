@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = xinput_calibrator
 INCLUDEPATH += . src
-DEFINES += VERSION='\\"0.18.10.3\\"'
+DEFINES += VERSION='\\"0.7.5-85\\"'
 QT += qml
 
 CONFIG += c++14
