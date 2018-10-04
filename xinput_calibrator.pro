@@ -27,3 +27,6 @@ SOURCES += src/calibrator.cpp \
 RESOURCES += \
     src/gui/qml/xinput_qml.qrc \
     src/gui/images/xinput_images.qrc
+
+target.path = $$PREFIX/opt/Opensoft/$$TARGET
+INSTALLS += target

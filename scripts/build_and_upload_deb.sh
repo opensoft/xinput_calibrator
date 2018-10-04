@@ -44,7 +44,7 @@ travis_fold start "prepare.docker" && travis_time_start;
 echo -e "\033[1;33mDownloading and starting Docker container...\033[0m";
 docker pull opensoftdev/proof-builder-base:latest;
 docker run -id --name builder -w="/sandbox" -v $(pwd):/sandbox/target_src -v $HOME/full_build:/sandbox/build \
-    -e "BUILD_ROOT=/sandbox/build" -e "PACKAGE_ROOT=/sandbox/package-$TARGET_NAME" -e "SKIP_BUILD_FOR_DEB_PACKAGE=true" -e "TARGET_NAME=$TARGET_NAME" \
+    -e "BUILD_ROOT=/sandbox/build" -e "PACKAGE_ROOT=/sandbox/package-$TARGET_NAME" -e "TARGET_NAME=$TARGET_NAME" \
     opensoftdev/proof-builder-base tail -f /dev/null;
 docker ps;
 travis_time_finish && travis_fold end "prepare.docker";
@@ -65,9 +65,8 @@ echo " ";
 
 travis_fold start "pack.deb" && travis_time_start;
 echo -e "\033[1;33mCreating deb package...\033[0m";
-echo "$ fakeroot dpkg-deb --build $PACKAGE_ROOT";
-
-docker exec -t builder bash -c "fakeroot dpkg-deb --build $PACKAGE_ROOT";
+echo "$ fakeroot dpkg-deb --build package-$TARGET_NAME";
+docker exec -t builder bash -c "fakeroot dpkg-deb --build package-$TARGET_NAME";
 travis_time_finish && travis_fold end "pack.deb";
 echo " ";
 
