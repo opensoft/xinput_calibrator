@@ -1,3 +1,5 @@
+.directory
+*.pro.user
 *.m4
 autom4te.cache
 autoscan.log

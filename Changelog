@@ -1,3 +1,8 @@
+xinput_calibrator 0.7.5-85 [2018-10-03]
+Major features:
+* Add Qt frontend
+* Minor changes
+
 xinput_calibrator 0.7.5 [2010-09-12]
 Major features:
 * support multi-head setups in the GUIs (Alexey Kuznetsov)
