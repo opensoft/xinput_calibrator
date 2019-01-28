@@ -1,5 +1,5 @@
 Package: xinput-calibrator
-Version: 0.7.5-85
+Version: 0.7.5+opensoft
 Section: misc
 Depends: qt5-opensoft
 Suggests: 
