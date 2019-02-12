@@ -28,16 +28,15 @@
 
 set -e
 
-DOCKER_IMAGE=opensoftdev/proof-builder-ccache;
+DOCKER_IMAGE=opensoftdev/proof-builder-base;
 TARGET_NAME=xinput_calibrator
-mkdir $HOME/builder_logs;
 
 travis_fold start "prepare.docker" && travis_time_start;
 echo -e "\033[1;33mDownloading and starting Docker container...\033[0m";
 sudo rm -rf $HOME/full_build && mkdir $HOME/full_build;
 docker pull $DOCKER_IMAGE:latest;
-docker run -id --name builder -w="/sandbox" \
-    -v $(pwd):/sandbox/target_src -v $HOME/proof-bin:/sandbox/proof-bin -v $HOME/builder_logs:/sandbox/logs \
+docker run --privileged -id --name builder -w="/sandbox" \
+    -v $(pwd):/sandbox/target_src -v $HOME/proof-bin:/sandbox/proof-bin \
     -v $HOME/builder_ccache:/root/.ccache -v $HOME/full_build:/sandbox/build $DOCKER_IMAGE tail -f /dev/null;
 docker ps;
 travis_time_finish && travis_fold end "prepare.docker";
@@ -50,19 +49,18 @@ docker exec -t builder bash -c "apt-get -qq install libxi-dev -y --no-install-re
 travis_time_finish && travis_fold end "prepare.extra_deps";
 echo " ";
 
-travis_fold start "build.qmake" && travis_time_start; 
+travis_fold start "build.qmake" && travis_time_start;
 echo -e "\033[1;33mRunning qmake...\033[0m";
 echo "$ qmake -r 'QMAKE_CXXFLAGS += -ferror-limit=0 -fcolor-diagnostics' PREFIX='/sandbox/package-$TARGET_NAME' ../target_src/$TARGET_NAME.pro";
-docker exec -t builder bash -c "exec 3>&1; set -o pipefail; rm -rf /sandbox/logs/*; cd build; \
-    qmake -r 'QMAKE_CXXFLAGS += -ferror-limit=0 -fcolor-diagnostics' PREFIX='/sandbox/package-$TARGET_NAME' \
-    ../target_src/$TARGET_NAME.pro 2>&1 1>&3 | (tee /sandbox/logs/errors.log 1>&2)";
+docker exec -t builder bash -c "cd build \
+    && qmake -r 'QMAKE_CXXFLAGS += -ferror-limit=0 -fcolor-diagnostics' PREFIX='/sandbox/package-$TARGET_NAME' ../target_src/$TARGET_NAME.pro";
 travis_time_finish && travis_fold end "build.qmake";
 echo " ";
 
 travis_fold start "build.compile" && travis_time_start;
 echo -e "\033[1;33mCompiling...\033[0m";
 echo "$ make -j4";
-docker exec -t builder bash -c "exec 3>&1; set -o pipefail; rm -rf /sandbox/logs/*; cd build; make -j4 2>&1 1>&3 | (tee /sandbox/logs/errors.log 1>&2)";
+docker exec -t builder bash -c "cd build && make -j4";
 travis_time_finish && travis_fold end "build.compile";
 echo " ";
 

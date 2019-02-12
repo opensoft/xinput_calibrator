@@ -1,13 +1,13 @@
 sudo: required
-dist: trusty
+dist: xenial
 
 addons:
   apt:
     update: true
     packages:
       - fakeroot
-      
-      
+
+
 language: cpp
 services:
   - docker
@@ -19,7 +19,7 @@ env:
 
 cache:
   directories:
-    - $HOME/builder_ccache 
+    - $HOME/builder_ccache
     - $HOME/full_build
     - $HOME/proof-bin
 
@@ -30,8 +30,8 @@ jobs:
     - &compile
       stage: compilation
       name: Compilation (Debian9/clang/ccache)
-      script: 
-        - export PROJECT_ROOT=`pwd` 
+      script:
+        - export PROJECT_ROOT=`pwd`
         - $PROJECT_ROOT/travis/linux_compile.sh
     - &post-compile
       stage: Post compilation
